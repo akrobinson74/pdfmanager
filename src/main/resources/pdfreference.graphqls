@@ -1,0 +1,25 @@
+type Query {
+    pdfs: [PdfReference]
+    getPdf(id: ID!): PdfReference
+}
+
+type Mutation {
+    uploadPdf(clientName: String!, countryCode: String!, data: String!, reportName: String!, reportType: ReportType!): PdfReference!
+}
+
+type PdfReference {
+    clientName: String!
+    countryCode: String!
+    data: String!
+    id: ID
+    reportName: String!
+    reportType: ReportType!
+}
+
+enum ReportType {
+    PLATFORMS,
+    SUBADVISORY_OPPORTUNITY_BY_CATEGORY,
+    SUBADVISED_WATCHLIST,
+    TOP_SUBADVISORS,
+    VA_CONTRACTS
+}
