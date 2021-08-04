@@ -1,19 +1,21 @@
 package com.simfund.pdfmanager.entities
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
-import java.util.Locale
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
 
-@Document(collection="pdfs")
+@Entity
 data class PdfReference(
     val clientName: String,
     val countryCode: String,
     val data: String,
     val reportName: String,
-    val reportType: ReportType
-) {
+    val reportType: ReportType = ReportType.PLATFORMS,
     @Id
-    var id: String = "";
+    @GeneratedValue
+    val id: Long = -1
+) {
+    constructor(): this("", "", "", "")
 }
 
 enum class ReportType {

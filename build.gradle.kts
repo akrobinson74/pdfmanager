@@ -16,7 +16,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -24,6 +23,9 @@ dependencies {
     implementation("com.graphql-java:graphql-spring-boot-starter:5.0.2")
     implementation("com.graphql-java:graphiql-spring-boot-starter:5.0.2")
     implementation("com.graphql-java:graphql-java-tools:5.2.4")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("org.postgresql:postgresql")
+//    developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
 }
