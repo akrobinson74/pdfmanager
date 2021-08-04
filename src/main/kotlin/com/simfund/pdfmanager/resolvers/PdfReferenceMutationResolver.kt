@@ -1,17 +1,13 @@
 package com.simfund.pdfmanager.resolvers
 
-import com.coxautodev.graphql.tools.GraphQLMutationResolver
 import com.simfund.pdfmanager.entities.PdfReference
 import com.simfund.pdfmanager.entities.ReportType
 import com.simfund.pdfmanager.repositories.PgPdfRepository
-import org.springframework.beans.factory.annotation.Autowired
+import graphql.kickstart.tools.GraphQLMutationResolver
 import org.springframework.stereotype.Component
 
 @Component
 class PdfReferenceMutationResolver(val pdfReferenceRepository: PgPdfRepository) : GraphQLMutationResolver {
-
-//    @Autowired
-//    lateinit var pdfReferenceRepository: PgPdfRepository
 
     fun uploadPdf(
         clientName: String,

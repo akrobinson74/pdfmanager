@@ -1,11 +1,10 @@
 package com.simfund.pdfmanager
 
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 
-@Disabled("Issue with tomcat >= 9.0.13")
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class PdfmanagerApplicationTests {
 
     @Test
