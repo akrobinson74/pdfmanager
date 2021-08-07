@@ -1,3 +1,17 @@
+scalar Upload
+
+input PdfMetaData {
+    clientName: String!
+    countryCode: String!
+    reportName: String!
+    reportType: ReportType!
+}
+
+input UploadInput {
+    meta: [PdfMetaData]
+    data: Upload!
+}
+
 type Query {
     pdfs: [PdfReference]
     getPdf(id: ID!): PdfReference
@@ -5,6 +19,7 @@ type Query {
 
 type Mutation {
     uploadPdf(clientName: String!, countryCode: String!, data: String!, reportName: String!, reportType: ReportType!): PdfReference!
+    uploadPdfs(uploadInput: UploadInput): [PdfReference]
 }
 
 type PdfReference {
