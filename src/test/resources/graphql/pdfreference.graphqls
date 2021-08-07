@@ -1,0 +1,40 @@
+scalar Upload
+
+input PdfMetaData {
+    clientName: String!
+    countryCode: String!
+    reportName: String!
+    reportType: ReportType!
+}
+
+input UploadInput {
+    meta: [PdfMetaData]
+    data: Upload!
+}
+
+type Query {
+    pdfs: [PdfReference]
+    getPdf(id: ID!): PdfReference
+}
+
+type Mutation {
+    uploadPdf(clientName: String!, countryCode: String!, data: String!, reportName: String!, reportType: ReportType!): PdfReference!
+    uploadPdfs(uploadInput: UploadInput): [PdfReference]
+}
+
+type PdfReference {
+    clientName: String!
+    countryCode: String!
+    data: String!
+    id: ID
+    reportName: String!
+    reportType: ReportType!
+}
+
+enum ReportType {
+    PLATFORMS,
+    SUBADVISORY_OPPORTUNITY_BY_CATEGORY,
+    SUBADVISED_WATCHLIST,
+    TOP_SUBADVISORS,
+    VA_CONTRACTS
+}

@@ -1,0 +1,14 @@
+---
+server:
+  port: 9001
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/pdf_manager_tests
+    username: dbadmin
+    password: "!fucko!"
+  jackson:
+    serialization:
+      indent_output: true
+  jpa:
+    generate-ddl: true
