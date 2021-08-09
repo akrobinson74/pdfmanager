@@ -1,4 +1,7 @@
-scalar Upload
+schema {
+    query: Query
+    mutation: Mutation
+}
 
 input PdfMetaData {
     clientName: String!
@@ -9,7 +12,6 @@ input PdfMetaData {
 
 input UploadInput {
     meta: [PdfMetaData]
-    data: Upload!
 }
 
 type Query {
@@ -18,9 +20,10 @@ type Query {
 }
 
 type Mutation {
-    uploadPdf(clientName: String!, countryCode: String!, data: String!, reportName: String!, reportType: ReportType!): PdfReference!
-    uploadPdfs(uploadInput: UploadInput): [PdfReference]
+    uploadPdfs: [PdfReference]
 }
+
+scalar Upload
 
 type PdfReference {
     clientName: String!

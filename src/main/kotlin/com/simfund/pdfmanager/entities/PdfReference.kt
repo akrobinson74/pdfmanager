@@ -15,7 +15,7 @@ data class PdfMetaData(
     @GeneratedValue
     val id: Long = -1
 ) {
-    constructor(): this("", "", "")
+    constructor() : this("", "", "")
 }
 
 @Entity
@@ -29,7 +29,7 @@ data class PdfReference(
     @GeneratedValue
     val id: Long = -1
 ) {
-    constructor(): this("", "", "", "")
+    constructor() : this("", "", "", "")
 }
 
 data class UploadTuple(

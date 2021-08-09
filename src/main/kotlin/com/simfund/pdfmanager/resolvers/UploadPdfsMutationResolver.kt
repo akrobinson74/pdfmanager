@@ -2,9 +2,10 @@ package com.simfund.pdfmanager.resolvers
 
 import com.simfund.pdfmanager.entities.PdfReference
 import com.simfund.pdfmanager.entities.ReportType
-import com.simfund.pdfmanager.entities.UploadTuple
 import com.simfund.pdfmanager.repositories.PgPdfRepository
+import graphql.kickstart.servlet.context.DefaultGraphQLServletContext
 import graphql.kickstart.tools.GraphQLMutationResolver
+import graphql.schema.DataFetchingEnvironment
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
@@ -13,52 +14,41 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.security.InvalidParameterException
 
-
-private const val BASE_DIR = "file:///opt/pdf/data"
+private const val BASE_DIR = "/opt/pdf/data"
 
 @Component
-class PdfReferenceMutationResolver(val pdfReferenceRepository: PgPdfRepository) : GraphQLMutationResolver {
-    private val logger = LoggerFactory.getLogger(PdfReferenceMutationResolver::class.java)
+class UploadPdfsMutationResolver(val pdfReferenceRepository: PgPdfRepository) : GraphQLMutationResolver {
+    private val logger = LoggerFactory.getLogger(UploadPdfsMutationResolver::class.java)
 
-    fun uploadPdf(
-        clientName: String,
-        countryCode: String,
-        data: String,
-        reportName: String,
-        reportType: ReportType
-    ): PdfReference =
-        PdfReference(clientName, countryCode, data, reportName, reportType).let {
-            pdfReferenceRepository.save(it)
-        }
+    fun uploadPdfs(dfe: DataFetchingEnvironment): List<PdfReference> = dfe.run {
+        val pdfList = mutableListOf<PdfReference>()
+        val context = this.getContext<DefaultGraphQLServletContext>()
 
-    fun uploadPdfs(
-        uploadInput: UploadTuple
-    ): List<PdfReference> = uploadInput.let {
-        val resultList = mutableListOf<PdfReference>()
-
-        it.upload.forEach { mpf ->
+        context .fileParts.forEach { mpf ->
             try {
-                val fileName =
-                    mpf.originalFilename ?: throw InvalidParameterException("Upload 'originalFilename' cannot be null")
+                val fileName = mpf.submittedFileName
+
                 val copyLocation: Path = Paths
                     .get(BASE_DIR + File.separator + StringUtils.cleanPath(fileName))
+                
+                logger.info("Copying inputStream to: {} ({} bytes)", copyLocation, mpf.size)
                 Files.copy(mpf.inputStream, copyLocation, StandardCopyOption.REPLACE_EXISTING)
 
+                logger.debug("Saving .pdf metaData for file: {}", fileName)
                 val (client, country, name, type) = parseFilename(fileName)
-                resultList.add(
+                pdfList.add(
                     pdfReferenceRepository.save(
                         PdfReference(client, country, "", name, ReportType.valueOf(type))
                     )
                 )
             } catch (ex: Exception) {
-                logger.error("Exception encountered uploading multiple files: ${ex.message}")
+                logger.error("Exception encountered uploading multiple files: {}", ex.localizedMessage)
                 throw ex
             }
         }
 
-        resultList.toList()
+        pdfList.toList()
     }
 
     private fun parseFilename(fileName: String): List<String> =
