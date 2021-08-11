@@ -8,7 +8,6 @@ import com.simfund.pdfmanager.repositories.PgPdfRepository
 import graphql.kickstart.servlet.context.DefaultGraphQLServletContext
 import graphql.kickstart.tools.GraphQLMutationResolver
 import graphql.schema.DataFetchingEnvironment
-import org.apache.logging.log4j.util.Strings
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
@@ -49,17 +48,17 @@ class UploadPdfsMutationResolver(val pdfReferenceRepository: PgPdfRepository) : 
                 )
 
                 val newDirPath = listOf(BASE_DIR, client, country, type.name).joinToString(File.separator)
-                val copyLocation: Path = Paths
-                    .get(listOf(newDirPath, StringUtils.cleanPath(fileName)).joinToString(File.separator))
                 Files.createDirectories(Paths.get(newDirPath))
+                val copyLocation: Path = Paths
+                    .get(listOf(newDirPath, StringUtils.cleanPath("$name.pdf")).joinToString(File.separator))
 
-                logger.info("Copying inputStream to: {} ({} bytes)", copyLocation, mpf.size)
+                logger.info("Copying inputStream named {} to: {} ({} bytes)", fileName, copyLocation, mpf.size)
                 Files.copy(mpf.inputStream, copyLocation, StandardCopyOption.REPLACE_EXISTING)
 
                 logger.debug("Saving .pdf metaData for file: {}", fileName)
                 pdfList.add(
                     pdfReferenceRepository.save(
-                        PdfReference(client, country, "", name, type)
+                        PdfReference(client, country, name, type)
                     )
                 )
             }

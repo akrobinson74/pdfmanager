@@ -15,14 +15,13 @@ data class PdfMetadata(
 data class PdfReference(
     val clientName: String,
     val countryCode: String,
-    val data: String,
     val reportName: String,
     val reportType: ReportType = ReportType.PLATFORMS,
     @Id
     @GeneratedValue
     val id: Long = -1
 ) {
-    constructor() : this("", "", "", "")
+    constructor() : this("", "", "")
 }
 
 data class UploadInput(

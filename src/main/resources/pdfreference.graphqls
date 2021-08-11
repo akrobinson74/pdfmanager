@@ -29,7 +29,6 @@ scalar Upload
 type PdfReference {
     clientName: String!
     countryCode: String!
-    data: String!
     id: ID
     reportName: String!
     reportType: ReportType!
