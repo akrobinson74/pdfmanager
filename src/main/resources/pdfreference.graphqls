@@ -3,7 +3,7 @@ schema {
     mutation: Mutation
 }
 
-input PdfMetaData {
+input PdfMetadata {
     clientName: String!
     countryCode: String!
     reportName: String!
@@ -11,7 +11,7 @@ input PdfMetaData {
 }
 
 input UploadInput {
-    meta: [PdfMetaData]
+    meta: [PdfMetadata!]
 }
 
 type Query {
@@ -21,6 +21,7 @@ type Query {
 
 type Mutation {
     uploadPdfs: [PdfReference]
+    uploadPdfsWithMetadata(uploadMetadata: UploadInput!): [PdfReference]
 }
 
 scalar Upload
