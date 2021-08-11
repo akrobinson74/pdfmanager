@@ -1,0 +1,110 @@
+{
+  "info": {
+    "_postman_id": "8dad7f8f-beee-4834-96be-97ae8e2e5b9e",
+    "name": "Genesys GraphQL",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Upload PDFs",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "operations",
+              "value": "{\"query\": \"mutation { uploadPdfs { clientName countryCode data id reportName reportType } }\", \"variables\": {}}",
+              "type": "text"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/Users/arobinson/Downloads/bofa.us.Top Subadvisory Stuff.TOP_SUBADVISORS.pdf"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/Users/arobinson/Downloads/bofa.us.Platforms Stuff.PLATFORMS.pdf"
+            }
+          ]
+        },
+        "url": {
+          "raw": "localhost:9000/graphql",
+          "host": [
+            "localhost"
+          ],
+          "port": "9000",
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Upload PDFs w/Metadata",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "operations",
+              "value": "{\"query\": \"mutation { uploadPdfsWithMetadata($uploadMetadata: UploadInput!) { clientName countryCode data id reportName reportType } }\", \"variables\": {\"uploadMetadata\": {\"meta\": [\n  {\"clientName\": \"bofa\", \"countryCode\": \"US\", \"reportName\": \"Top Subadvisory Stuff\", \"reportType\": \"TOP_SUBADVISORS\"},\n  {\"clientName\": \"bofa\", \"countryCode\": \"US\", \"reportName\": \"Platforms Stuff\", \"reportType\": \"PLATFORMS\"}]}}}",
+              "type": "text"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/Users/arobinson/Downloads/bofa.us.Top Subadvisory Stuff.TOP_SUBADVISORS.pdf"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/Users/arobinson/Downloads/bofa.us.Platforms Stuff.PLATFORMS.pdf"
+            }
+          ]
+        },
+        "url": {
+          "raw": "localhost:9000/graphql",
+          "host": [
+            "localhost"
+          ],
+          "port": "9000",
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Pdfs",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\n  pdfs {\n    clientName\n    countryCode\n    id\n    reportName\n    reportType\n  }\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "localhost:9000/graphql",
+          "host": [
+            "localhost"
+          ],
+          "port": "9000",
+          "path": [
+            "graphql"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
