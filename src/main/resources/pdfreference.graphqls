@@ -6,6 +6,7 @@ schema {
 input PdfMetadata {
     clientName: String!
     countryCode: String!
+    inputFilename: String
     reportName: String!
     reportType: ReportType!
 }
@@ -30,6 +31,7 @@ type PdfReference {
     clientName: String!
     countryCode: String!
     id: ID
+    inputFilename: String
     reportName: String!
     reportType: ReportType!
 }

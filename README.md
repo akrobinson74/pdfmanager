@@ -33,11 +33,16 @@ Presuming an exceptionless start to the application, the GraphiQL interface
 should be available at: http://localhost:9000/graphiql
 
 Per the schema there are 2 query operations: `pdfs` and `getPdf(id: ID!)`
-(where ID is a UUID string).  There is a single mutation operation:
+(where ID is a UUID string).  There are two mutation operation:
 ```
 uploadPdfs: [PdfReference]
+uploadPdfsWithMetadata(uploadMetadata: UploadInput!): [PdfReference]
 ```
-Use Postman to upload .pdfs.  See the following image and ask Adam for help:
+Use Postman to upload .pdfs.  In the case of the uploadPdfs operation, the
+resolver will split the inputFile name(s) on the '.' character to extract the
+clientName, countryCode, reportType, and reportName from the string (eg. '' -> ())
+
+See the following image and ask Adam if you need any help:
 ![Postman upload screenshot](src/main/resources/Postman-uploadPdfs.png?raw=true)
 
 Enjoy!

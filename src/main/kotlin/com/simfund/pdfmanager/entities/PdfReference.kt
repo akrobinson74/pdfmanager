@@ -7,6 +7,7 @@ import javax.persistence.Id
 data class PdfMetadata(
     val clientName: String,
     val countryCode: String,
+    val inputFilename: String? = null,
     val reportName: String,
     val reportType: ReportType = ReportType.PLATFORMS,
 )
@@ -15,13 +16,14 @@ data class PdfMetadata(
 data class PdfReference(
     val clientName: String,
     val countryCode: String,
+    val inputFilename: String,
     val reportName: String,
     val reportType: ReportType = ReportType.PLATFORMS,
     @Id
     @GeneratedValue
     val id: Long = -1
 ) {
-    constructor() : this("", "", "")
+    constructor() : this("", "", "", "")
 }
 
 data class UploadInput(

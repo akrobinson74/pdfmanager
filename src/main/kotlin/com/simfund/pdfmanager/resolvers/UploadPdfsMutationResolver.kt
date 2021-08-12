@@ -42,7 +42,7 @@ class UploadPdfsMutationResolver(val pdfReferenceRepository: PgPdfRepository) : 
             context.fileParts.forEachIndexed { index, mpf ->
                 val fileName = mpf.submittedFileName
 
-                val (client, country, name, type) = getMetadataOrParseFilename(
+                val (client, country, _, reportName, type) = getMetadataOrParseFilename(
                     fileName,
                     uploadMetadata?.meta?.get(index)
                 )
@@ -50,7 +50,7 @@ class UploadPdfsMutationResolver(val pdfReferenceRepository: PgPdfRepository) : 
                 val newDirPath = listOf(BASE_DIR, client, country, type.name).joinToString(File.separator)
                 Files.createDirectories(Paths.get(newDirPath))
                 val copyLocation: Path = Paths
-                    .get(listOf(newDirPath, StringUtils.cleanPath("$name.pdf")).joinToString(File.separator))
+                    .get(listOf(newDirPath, StringUtils.cleanPath("$reportName.pdf")).joinToString(File.separator))
 
                 logger.info("Copying inputStream named {} to: {} ({} bytes)", fileName, copyLocation, mpf.size)
                 Files.copy(mpf.inputStream, copyLocation, StandardCopyOption.REPLACE_EXISTING)
@@ -58,7 +58,7 @@ class UploadPdfsMutationResolver(val pdfReferenceRepository: PgPdfRepository) : 
                 logger.debug("Saving .pdf metaData for file: {}", fileName)
                 pdfList.add(
                     pdfReferenceRepository.save(
-                        PdfReference(client, country, name, type)
+                        PdfReference(client, country, fileName, reportName, type)
                     )
                 )
             }
@@ -71,10 +71,10 @@ class UploadPdfsMutationResolver(val pdfReferenceRepository: PgPdfRepository) : 
     }
 
     private fun getMetadataOrParseFilename(fileName: String, metaData: PdfMetadata? = null): PdfMetadata =
-        metaData ?: parseFilename(fileName)
+        metaData?.copy(inputFilename = fileName) ?: parseFilename(fileName)
 
     private fun parseFilename(fileName: String): PdfMetadata =
         fileName.split(".").let { nameParts ->
-            PdfMetadata(nameParts[1], nameParts[2], nameParts[0], ReportType.valueOf(nameParts[3]))
+            PdfMetadata(nameParts[0], nameParts[1], fileName, nameParts[2], ReportType.valueOf(nameParts[3]))
         }
 }
