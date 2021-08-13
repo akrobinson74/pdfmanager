@@ -1,33 +1,31 @@
 package com.simfund.pdfmanager.conf
 
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
-import org.springframework.web.server.ServerWebExchange
-import org.springframework.web.server.WebFilter
-import org.springframework.web.server.WebFilterChain
-import reactor.core.publisher.Mono
+import java.io.IOException
+import javax.servlet.Filter
+import javax.servlet.FilterChain
+import javax.servlet.ServletException
+import javax.servlet.ServletRequest
+import javax.servlet.ServletResponse
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 @Component
-class CorsFilter : WebFilter {
-
-    override fun filter(ctx: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
-        ctx.response.headers.add("Access-Control-Allow-Origin", "*")
-        ctx.response.headers.add("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS")
-        ctx.response.headers.add(
-            "Access-Control-Allow-Headers",
-            "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range"
-        )
-        if (ctx.request.method == HttpMethod.OPTIONS) {
-            ctx.response.headers.add("Access-Control-Max-Age", "1728000")
-            ctx.response.statusCode = HttpStatus.NO_CONTENT
-            return Mono.empty()
+@Order(Ordered.HIGHEST_PRECEDENCE)
+class CorsFilter : Filter {
+    @Throws(IOException::class, ServletException::class)
+    override fun doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
+        val response = res as HttpServletResponse
+        response.setHeader("Access-Control-Allow-Origin", "*")
+        response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS")
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type")
+        response.setHeader("Access-Control-Max-Age", "3600")
+        if ("OPTIONS".equals((req as HttpServletRequest).method, ignoreCase = true)) {
+            response.status = HttpServletResponse.SC_OK
         } else {
-            ctx.response.headers.add(
-                "Access-Control-Expose-Headers",
-                "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range"
-            )
-            return chain.filter(ctx)
+            chain.doFilter(req, res)
         }
     }
 }

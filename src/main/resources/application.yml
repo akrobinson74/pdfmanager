@@ -23,4 +23,3 @@ spring:
       indent_output: true
   jpa:
     generate-ddl: true
-
