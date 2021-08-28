@@ -1,0 +1,21 @@
+extend type QueryResolver {
+    pdfsWithFilter(filter: PdfFilter): [PdfReference]
+}
+
+input FilterField {
+    operator: String!
+    value: String!
+}
+
+input PdfFilter {
+    clientNameFilter: FilterField
+    countryCodeFiler: FilterField
+    inputFilenameFilter: FilterField
+    reportNameFilter: FilterField
+    reportTypeFilter: FilterField
+}
+
+schema {
+    query: QueryResolver
+    mutation: MutationResolver
+}

@@ -58,7 +58,7 @@ class UploadPdfsMutationResolver(val pdfReferenceRepository: PgPdfRepository) : 
                 logger.debug("Saving .pdf metaData for file: {}", fileName)
                 pdfList.add(
                     pdfReferenceRepository.save(
-                        PdfReference(client, country, fileName, reportName, type)
+                        getPdfReferenceForValues(client, country, fileName, reportName, type)
                     )
                 )
             }
@@ -69,6 +69,22 @@ class UploadPdfsMutationResolver(val pdfReferenceRepository: PgPdfRepository) : 
 
         return pdfList.toList()
     }
+
+    private fun getPdfReferenceForValues(
+        client: String,
+        country: String,
+        fileName: String,
+        reportName: String,
+        type: ReportType
+    ): PdfReference =
+        PdfReference().let {
+            it.clientName = client
+            it.countryCode = country
+            it.inputFilename = fileName
+            it.reportName = reportName
+            it.reportType = type
+            it
+        }
 
     private fun getMetadataOrParseFilename(fileName: String, metaData: PdfMetadata? = null): PdfMetadata =
         metaData?.copy(inputFilename = fileName) ?: parseFilename(fileName)

@@ -1,8 +1,3 @@
-schema {
-    query: Query
-    mutation: Mutation
-}
-
 input PdfMetadata {
     clientName: String!
     countryCode: String!
@@ -15,17 +10,15 @@ input UploadInput {
     meta: [PdfMetadata!]
 }
 
-type Query {
+type QueryResolver {
     pdfs: [PdfReference]
     getPdf(id: ID!): PdfReference
 }
 
-type Mutation {
+type MutationResolver {
     uploadPdfs: [PdfReference]
     uploadPdfsWithMetadata(uploadMetadata: UploadInput!): [PdfReference]
 }
-
-scalar Upload
 
 type PdfReference {
     clientName: String!
