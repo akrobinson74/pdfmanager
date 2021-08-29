@@ -9,7 +9,10 @@ data class FilterField(val operator: String, val value: String) {
     fun generateCriteria(builder: CriteriaBuilder, field: Path<String>): Predicate? {
         try {
             val v = value.toInt()
+
+            @Suppress("UNCHECKED_CAST")
             val f = field as Path<Int>
+
             return when (operator) {
                 "lt" -> builder.lt(f, v)
                 "le" -> builder.le(f, v)

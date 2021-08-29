@@ -51,18 +51,18 @@ open class PdfReference {
 
         val another = other as PdfReference
 
-        if (!this.reportName.equals(another.reportName)) return false
+        if (this.reportName != another.reportName) return false
 
-        if (!this.reportType.equals(another.reportType)) return false
+        if (this.reportType != another.reportType) return false
 
-        if (!this.clientName.equals(another.clientName)) return false
+        if (this.clientName != another.clientName) return false
 
-        if (!this.countryCode.equals(another.countryCode)) return false
+        if (this.countryCode != another.countryCode) return false
 
         return true
     }
 
-    override fun hashCode(): Int = if (!id.equals(-1L)) id.hashCode() else super.hashCode()
+    override fun hashCode(): Int = if (id != -1L) id.hashCode() else super.hashCode()
 }
 
 data class UploadInput(
