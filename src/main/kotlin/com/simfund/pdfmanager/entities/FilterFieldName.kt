@@ -8,7 +8,7 @@ enum class FilterFieldName {
     REPORT_TYPE;
 
     fun toCamelCase() = this.name.lowercase().split("_").mapIndexed { index, s ->
-        if (index == 0 ) s
+        if (index == 0) s
         else s[0].uppercase() + s.substring(1)
     }
         .joinToString("")
