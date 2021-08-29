@@ -30,21 +30,4 @@ data class FilterField(val operator: String, val value: String) {
             throw Exception("Unable to cast Path as Path<Int>: $field.")
         }
     }
-//    fun generateCriteria(builder: CriteriaBuilder, field: Path): Predicate? {
-//        try {
-//            val query = builder.createQuery(PdfReference::class.java)
-//            val root = query.from(PdfReference::class.java)
-//            val intValue = Integer.parseInt(value)
-//            return when (operator) {
-//                "eq" -> builder.equal(root.get<Long>("id"), intValue)
-//                "ge" -> builder.ge(field, intValue)
-//                "gt" -> builder.gt(field, intValue)
-//                else -> throw Exception("u is bad")
-//            }
-//        } catch (e: Exception) {
-//
-//        }
-//
-//        return null
-//    }
 }

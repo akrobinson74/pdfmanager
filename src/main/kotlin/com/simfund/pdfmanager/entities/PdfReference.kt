@@ -1,6 +1,18 @@
 package com.simfund.pdfmanager.entities
 
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.Table
+
+data class PdfFilter(
+    val clientNameFilter: FilterField? = null,
+    val countryCodeFilter: FilterField? = null,
+    val inputFilenameFilter: FilterField? = null,
+    val reportNameFilter: FilterField? = null,
+    val reportTypeFilter: FilterField? = null
+)
 
 data class PdfMetadata(
     val clientName: String,
@@ -24,10 +36,10 @@ open class PdfReference {
     @get:Column(name = "country_code")
     open var countryCode: String = ""
 
-    @get:Column(name = "client_name")
+    @get:Column(name = "input_file_name")
     open var inputFilename: String = ""
 
-    @get:Column(name = "client_name")
+    @get:Column(name = "report_name")
     open var reportName: String = ""
 
     @get:Column(name = "report_type")
@@ -38,11 +50,11 @@ open class PdfReference {
         if (other == null || javaClass != other.javaClass) return false
 
         val another = other as PdfReference
-        
+
         if (!this.reportName.equals(another.reportName)) return false
 
         if (!this.reportType.equals(another.reportType)) return false
-        
+
         if (!this.clientName.equals(another.clientName)) return false
 
         if (!this.countryCode.equals(another.countryCode)) return false
@@ -50,7 +62,7 @@ open class PdfReference {
         return true
     }
 
-    override fun hashCode(): Int = if (!id.equals(-1)) id.hashCode() else super.hashCode()
+    override fun hashCode(): Int = if (!id.equals(-1L)) id.hashCode() else super.hashCode()
 }
 
 data class UploadInput(
