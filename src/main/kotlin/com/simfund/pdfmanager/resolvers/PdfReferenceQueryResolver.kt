@@ -1,5 +1,6 @@
 package com.simfund.pdfmanager.resolvers
 
+import arrow.core.getOrElse
 import com.simfund.pdfmanager.entities.FilterField
 import com.simfund.pdfmanager.entities.PdfFilter
 import com.simfund.pdfmanager.entities.PdfReference
@@ -13,28 +14,34 @@ class PdfReferenceQueryResolver(val pdfReferenceRepository: PgPdfRepository) : G
     fun pdfs(): List<PdfReference> = pdfReferenceRepository.findAll().toList()
     fun getPdf(id: Long) = pdfReferenceRepository.findById(id)
 
-    fun pdfsWithFilter(pdfFilter: PdfFilter): Iterable<PdfReference> {
+    fun pdfsWithFilter(filterList: List<FilterField>): Iterable<PdfReference> = filterList.let { it ->
         var pdfSpecification: Specification<PdfReference>? = null
-
-        filterFieldTofieldNameMapping(pdfFilter)
-            .forEach { (k, v) ->
-                if (k != null) pdfSpecification = pdfSpecification?.and(applyFilter(k, v)) ?: applyFilter(k, v)
-            }
-
+        it.forEach { ff ->
+            pdfSpecification = pdfSpecification?.and(applyFilter(ff)) ?: applyFilter(ff)
+        }
+//    }
+//        var pdfSpecification: Specification<PdfReference>? = null
+//
+//        filterFieldTofieldNameMapping(pdfFilter)
+//            .forEach { (k, v) ->
+//                if (k != null) pdfSpecification = pdfSpecification?.and(applyFilter(k, v)) ?: applyFilter(k, v)
+//            }
+//
         return if (pdfSpecification == null) pdfReferenceRepository.findAll()
         else pdfReferenceRepository.findAll(pdfSpecification)
     }
 
-    private fun filterFieldTofieldNameMapping(pdfFilter: PdfFilter) = mapOf(
-        pdfFilter.clientNameFilter to "clientName",
-        pdfFilter.countryCodeFilter to "countryCode",
-        pdfFilter.inputFilenameFilter to "inputFilename",
-        pdfFilter.reportNameFilter to "reportName",
-        pdfFilter.reportTypeFilter to "reportType"
-    )
+//    private fun filterFieldTofieldNameMapping(pdfFilter: PdfFilter) = mapOf(
+//        pdfFilter.clientNameFilter to "clientName",
+//        pdfFilter.countryCodeFilter to "countryCode",
+//        pdfFilter.inputFilenameFilter to "inputFilename",
+//        pdfFilter.reportNameFilter to "reportName",
+//        pdfFilter.reportTypeFilter to "reportType"
+//    )
 
-    private fun applyFilter(filter: FilterField, fieldName: String): Specification<PdfReference> =
+    private fun applyFilter(filter: FilterField): Specification<PdfReference>? =
         Specification<PdfReference> { root, _, builder ->
-            filter.generateCriteria(builder, root.get(fieldName))
+            val attribute = filter.fieldName.toCamelCase()
+            filter.generateCriteria(builder, root.get(attribute)).getOrElse { null }
         }
 }

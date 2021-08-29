@@ -1,18 +1,39 @@
 extend type QueryResolver {
-    pdfsWithFilter(filter: PdfFilter): [PdfReference]
+    pdfsWithFilter(filterList: [FilterField!]!): [PdfReference]
 }
 
 input FilterField {
-    operator: String!
+    fieldName: FieldName!
+    operator: FilterOperator!
     value: String!
 }
 
 input PdfFilter {
     clientNameFilter: FilterField
-    countryCodeFiler: FilterField
+    countryCodeFilter: FilterField
     inputFilenameFilter: FilterField
     reportNameFilter: FilterField
     reportTypeFilter: FilterField
+}
+
+enum FieldName {
+    CLIENT_NAME,
+    COUNTRY_CODE,
+    INPUT_FILE_NAME,
+    REPORT_NAME,
+    REPORT_TYPE
+}
+
+enum FilterOperator {
+    EQ,
+    GE,
+    GT,
+    LE,
+    LT,
+    CONTAINS,
+    ENDS_WITH,
+    EQUALS,
+    STARTS_WITH
 }
 
 schema {

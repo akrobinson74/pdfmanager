@@ -24,6 +24,7 @@ dependencies {
     implementation("com.graphql-java-kickstart:graphql-webclient-spring-boot-starter:1.0.0")
     implementation("com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0")
     implementation("com.graphql-java-kickstart:graphql-java-tools:11.0.1")
+    implementation("io.arrow-kt:arrow-core:0.13.2")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
